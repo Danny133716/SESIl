@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поздравление</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #000000, #2b0038);
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Фоновые звезды */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            width: 2px;
+            height: 2px;
+            background: white;
+            position: absolute;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Окно ввода данных */
+        .form-container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 600px;
+            animation: slideDown 1.5s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            color: #fff;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        input {
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            width: 80%;
+        }
+
+        .btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #ff6a9e;
+            color: #fff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #ff3e70;
+            animation: shake 0.3s;
+        }
+
+        /* Анимация тряски кнопки */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Анимация появления */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Карточка с поздравлением */
+        .card {
+            display: none;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 600px;
+            animation: slideDown 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        /* Модальное окно с вопросом */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: black;
+        }
+
+        .modal .btn {
+            margin: 10px;
+        }
+
+        .btn-no {
+            position: relative;
+        }
+
+        /* Эффекты салюта */
+        .fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, yellow, red);
+            opacity: 0.8;
+            animation: explode 1s forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(5);
+                opacity: 0;
+            }
+        }
+
+        /* Стили для мини-игры */
+        .game-container {
+            display: none;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .target {
+            width: 80px; /* Увеличение размера цели */
+            height: 80px; /* Увеличение размера цели */
+            background-color: #ff6a9e;
+            border-radius: 50%;
+            position: absolute;
+            transition: transform 0.1s;
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        .score {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Добавление фоновой музыки -->
+    <audio id="background-music" autoplay loop>
+        <source src="https://github.com/Danny133716/birtday/raw/a2323c0947472105d45d08eeeae45da3c82bc889/Hans%20Zimmer%20-%20Cornfield%20Chase.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="stars">
+        <!-- Генерация множества звездочек -->
+        <script>
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDuration = Math.random() * 2 + 3 + 's'; // случайная скорость
+                star.style.opacity = Math.random(); // случайная прозрачность
+                document.querySelector('.stars').appendChild(star);
+            }
+        </script>
+    </div>
+
+    <div class="form-container" id="form-container">
+        <h1>Введи своё имя и возраст</h1>
+        <input type="text" id="name" placeholder="Имя" required>
+        <input type="number" id="age" placeholder="Возраст" required min="1">
+        <button class="btn" onclick="showModal()">Узнать поздравление</button>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2>Тебе точно 22?</h2>
+            <button class="btn" onclick="startGame()">Да</button>
+            <button class="btn btn-no" id="btnNo">Нет</button>
+        </div>
+    </div>
+
+    <!-- Мини-игра -->
+    <div class="game-container" id="game-container">
+        <h1>Собери 5 очков!</h1>
+        <div class="score" id="score">Очки: 0</div>
+        <div class="target" id="target"></div>
+    </div>
+
+    <div class="card" id="card">
+        <h1 id="greeting"></h1>
+        <p id="message"></p>
+    </div>
+
+    <div class="fireworks" id="fireworks"></div>
+
+    <script>
+        let age;
+        let name;
+        let points = 0;
+        const target = document.getElementById('target');
+        const scoreDisplay = document.getElementById('score');
+        const gameContainer = document.getElementById('game-container');
+
+        function showModal() {
+            name = document.getElementById('name').value;
+            age = document.getElementById('age').value;
+
+            if (name && age) {
+                document.getElementById('form-container').style.display = 'none'; // Скрываем форму
+                document.getElementById('modal').style.display = 'flex'; // Показываем модальное окно
+            } else {
+                alert('Пожалуйста, введите своё имя и возраст.');
+            }
+        }
+
+        function startGame() {
+            document.getElementById('modal').style.display = 'none'; // Скрываем модальное окно
+            gameContainer.style.display = 'block'; // Показываем игровую зону
+            points = 0; // Сброс очков
+            scoreDisplay.textContent = `Очки: ${points}`; // Обновляем отображение очков
+            moveTarget();
+        }
+
+        function moveTarget() {
+            target.style.display = 'block'; // Показываем цель
+
+            // Устанавливаем позиции шаров дальше от центра
+            const positions = [
+                { left: '20%', top: '30%' },
+                { left: '15%', top: '50%' },
+                { left: '30%', top: '70%' },
+                { left: '60%', top: '50%' },
+                { left: '75%', top: '30%' },
+                { left: '80%', top: '70%' }
+            ];
+            const randomIndex = Math.floor(Math.random() * positions.length);
+            target.style.left = positions[randomIndex].left;
+            target.style.top = positions[randomIndex].top;
+        }
+
+        target.addEventListener('click', () => {
+            points++;
+            scoreDisplay.textContent = `Очки: ${points}`;
+            if (points >= 5) {
+                showCard();
+            } else {
+                moveTarget();
+            }
+        });
+
+        function showCard() {
+            gameContainer.style.display = 'none'; // Скрываем игровую зону
+            const card = document.getElementById('card');
+            card.style.display = 'block';
+            card.querySelector('#greeting').textContent = `С Днём Рождения, ${name}!`;
+            card.querySelector('#message').textContent = `Тебе уже ${age} лет — Кто-то может сказать что ты стареешь, но я скажу что ты выдерживаешься как вино, с любовью, Дэнни!`;
+
+            // Показать эффект салюта
+            showFireworks();
+
+            card.style.animation = 'fadeInUp 1.5s ease-in-out';
+        }
+
+        function showFireworks() {
+            const fireworksContainer = document.getElementById('fireworks');
+            fireworksContainer.style.display = 'block';
+
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    firework.style.width = `${Math.random() * 20 + 20}px`; // случайный размер
+                    firework.style.height = firework.style.width;
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.bottom = '0';
+                    fireworksContainer.appendChild(firework);
+
+                    // Убираем фейерверк через 1 секунду
+                    setTimeout(() => {
+                        fireworksContainer.removeChild(firework);
+                    }, 1000);
+                }, i * 200); // задержка между фейерверками
+            }
+        }
+
+        // Логика для кнопки "Нет", чтобы она убегала
+        const btnNo = document.getElementById('btnNo');
+        btnNo.addEventListener('mouseover', function() {
+            const x = Math.random() * (window.innerWidth - btnNo.clientWidth);
+            const y = Math.random() * (window.innerHeight - btnNo.clientHeight);
+            btnNo.style.position = 'absolute';
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+        });
+    </script>
+
+</body>
+</html>
